@@ -31,4 +31,4 @@ RUN useradd --create-home --shell /usr/sbin/nologin appuser \
 EXPOSE 8000
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["openstd_spider_web"]
+CMD ["python", "-m", "uvicorn", "openstd_spider.web:app", "--host", "0.0.0.0", "--port", "8000"]

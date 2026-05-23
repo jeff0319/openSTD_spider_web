@@ -28,5 +28,8 @@ scripts = { openstd_spider = "openstd_spider.__main__:app", openstd_spider_web =
 [tool.pdm]
 distribution = true
 
+[tool.setuptools.package-data]
+openstd_spider = ["web_static/*.html"]
+
 [tool.black]
 line-length = 120
