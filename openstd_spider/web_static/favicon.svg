@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="OpenSTD Spider">
+  <defs>
+    <linearGradient id="paper" x1="14" y1="8" x2="50" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eaf4ef"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="18" y1="48" x2="53" y2="18" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b6b54"/>
+      <stop offset="1" stop-color="#19a17d"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0b6b54"/>
+  <path d="M19 10h20l10 10v33a5 5 0 0 1-5 5H19a5 5 0 0 1-5-5V15a5 5 0 0 1 5-5z" fill="url(#paper)"/>
+  <path d="M39 10v9a2 2 0 0 0 2 2h8" fill="#cfe8dd"/>
+  <path d="M23 25h18M23 32h16M23 39h11" stroke="#6a7970" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="39" cy="40" r="10" fill="#ffffff" stroke="url(#accent)" stroke-width="4"/>
+  <path d="m46 47 7 7" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+  <path d="m46 47 7 7" stroke="#073c31" stroke-width="4" stroke-linecap="round"/>
+  <path d="M39 34v9m0 0-4-4m4 4 4-4" stroke="#0b6b54" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
