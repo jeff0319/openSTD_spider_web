@@ -118,6 +118,65 @@ openstd_spider download 'https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=7296
 
 默认情况下 PDF 文件将下载到当前目录，并以标准编号命名，也可加`-o`参数指定输出路径或文件名。
 
+### Web 界面下载
+
+本仓库额外提供了一个浏览器界面，方便搜索、查看元数据并下载 PDF。
+
+安装依赖后启动服务：
+
+```bash
+openstd_spider_web
+```
+
+或者在源码目录直接运行：
+
+```bash
+uvicorn openstd_spider.web:app --host 127.0.0.1 --port 8000
+```
+
+然后访问：
+
+```text
+http://127.0.0.1:8000
+```
+
+下载完成的 PDF 会保存到项目根目录的 `downloads/` 文件夹。
+
+如果同名 PDF 已经存在，网页会直接显示“打开已下载文件”，不会重复请求原网站；需要重新生成时可以点击“重新下载”。
+
+### Docker 部署
+
+构建并启动：
+
+```bash
+docker compose up -d --build
+```
+
+访问：
+
+```text
+http://服务器IP:18080
+```
+
+下载文件会通过 volume 持久化到宿主机项目目录的 `downloads/` 文件夹。
+
+停止服务：
+
+```bash
+docker compose down
+```
+
+也可以直接使用 Docker 命令：
+
+```bash
+docker build -t openstd-spider-web .
+docker run -d --name openstd-spider-web \
+  -p 18080:8000 \
+  -v "$PWD/downloads:/app/downloads" \
+  --restart unless-stopped \
+  openstd-spider-web
+```
+
 ## ✨Features
 
 - 集成搜索、元数据查询、PDF 下载三个功能，通过子命令进行调用

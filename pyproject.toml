@@ -16,11 +16,13 @@ dependencies = [
     "rich>=13.9.4",
     "dataclasses-json>=0.6.7",
     "aiofiles>=25.1.0",
+    "fastapi>=0.115.8",
+    "uvicorn[standard]>=0.34.0",
 ]
 requires-python = ">=3.10,<3.13"
 readme = "README.md"
 license = { text = "GPLV3" }
-scripts = { openstd_spider = "openstd_spider.__main__:app" }
+scripts = { openstd_spider = "openstd_spider.__main__:app", openstd_spider_web = "openstd_spider.web:main" }
 
 
 [tool.pdm]

@@ -27,7 +27,7 @@ class OpenstdDto:
                 "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
             },
             base_url=BASE_URL_OPENSTD,
-            follow_redirects=False,
+            follow_redirects=True,
         )
 
     async def get_std_meta(self, std_id: str) -> StdMetaFull:

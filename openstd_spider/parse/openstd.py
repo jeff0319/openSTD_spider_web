@@ -1,3 +1,4 @@
+import re
 from datetime import date
 
 from bs4 import BeautifulSoup
@@ -5,6 +6,13 @@ from bs4 import BeautifulSoup
 from ..exception import NotFoundError
 from ..schema import StdListItem, StdMetaFull, StdSearchResult, StdStatus
 from ..utils import name2std_status
+
+
+def parse_date_text(text: str) -> date | None:
+    text = text.strip()
+    if not text:
+        return None
+    return date.fromisoformat(text.split()[0])
 
 
 def openstd_parse_meta(html_text: str) -> StdMetaFull:
@@ -54,25 +62,32 @@ def openstd_parse_search_result(html_text: str) -> StdSearchResult:
     html = BeautifulSoup(html_text, "lxml")
     table = html.select("table.result_list>tbody:nth-of-type(2)>tr")
     for row in table:
-        pub_date = (row.select_one("td:nth-of-type(7)").string or "").strip()
-        impl_date = (row.select_one("td:nth-of-type(8)").string or "").strip()
+        cells = row.select("td")
+        if len(cells) < 9:
+            continue
+        code_link = cells[1].select_one("a")
+        name_link = cells[4].select_one("a")
+        status_span = cells[6].select_one("span")
+        if code_link is None or name_link is None or status_span is None:
+            continue
         items.append(
             StdListItem(
-                id=row.select_one("td:nth-of-type(2)>a")["onclick"][10:-3],
-                std_code=row.select_one("td:nth-of-type(2)>a").string.strip(),
-                is_ref=row.select_one("td:nth-of-type(3)>span") is not None,
-                name_cn=row.select_one("td:nth-of-type(4)>a").string.strip(),
-                status=StdStatus(name2std_status(row.select_one("td:nth-of-type(6)>span").string.strip())),
-                pub_date=date.fromisoformat(pub_date) if pub_date else None,
-                impl_date=date.fromisoformat(impl_date) if impl_date else None,
+                id=code_link["onclick"][10:-3],
+                std_code=code_link.string.strip(),
+                is_ref=bool(cells[3].get_text(strip=True)),
+                name_cn=name_link.string.strip(),
+                status=StdStatus(name2std_status(status_span.string.strip())),
+                pub_date=parse_date_text(cells[7].get_text(strip=True)),
+                impl_date=parse_date_text(cells[8].get_text(strip=True)),
             )
         )
     tag = html.select_one("div.hidden-xs>table>tr>td:nth-of-type(1)>span")
-    tag2 = list(tag.strings)
+    page_text = tag.get_text(" ", strip=True) if tag else ""
+    page_match = re.search(r"共\s*(\d+)\s*条标准\s*(\d+)\s*/\s*(\d+)", page_text)
 
     return StdSearchResult(
         items=items,
-        total_item=int(tag2[8].strip()),
-        page=int(tag2[11].strip()),
-        total_page=int(tag2[12][3:].strip()),
+        total_item=int(page_match.group(1)) if page_match else len(items),
+        page=int(page_match.group(2)) if page_match else 1,
+        total_page=int(page_match.group(3)) if page_match else 1,
     )

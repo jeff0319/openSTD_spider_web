@@ -1,0 +1,13 @@
+services:
+  openstd-spider-web:
+    build: .
+    container_name: openstd-spider-web
+    restart: unless-stopped
+    ports:
+      - "18080:8000"
+    environment:
+      OPENSTD_HOST: 0.0.0.0
+      OPENSTD_PORT: 8000
+      OPENSTD_DOWNLOAD_DIR: /app/downloads
+    volumes:
+      - ./downloads:/app/downloads
